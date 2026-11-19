@@ -1,0 +1,7 @@
+image,type,verdict,note
+000000000785,missing_box,confirmed,"Panoptic segment skis không có Detection box tương ứng trong ảnh."
+000000001818,missing_box,confirmed,"Cá thể zebra Panoptic ID 8092282 không có Detection box; chỉ cá thể còn lại có box."
+000000006471,category_swap,confirmed,"Panoptic segment ID 4869200 bị gán category couch, trong khi đối tượng tương ứng là bench."
+000000013177,class_or_category_swap,rejected,"Đã kiểm tra đối chiếu Detection và Panoptic nhưng không xác nhận được lỗi đổi lớp hoặc category."
+000000015079,instance_merge,rejected,"Hai phần sandwich có hai Detection box riêng; chưa xác nhận được lỗi gộp hai cá thể thành một segment."
+000000015079,instance_merge,rejected,"Đã kiểm tra các segment sandwich, không xác nhận được lỗi gộp nhiều cá thể thành một segment."
