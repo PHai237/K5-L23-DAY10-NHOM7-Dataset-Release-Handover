@@ -1,0 +1,49 @@
+{
+ "candidates": [
+  {
+   "image": "img_0003",
+   "type": "class_or_category_swap",
+   "note": "segment chair ↔ box bench (IoU 1.00)"
+  },
+  {
+   "image": "img_0138",
+   "type": "class_or_category_swap",
+   "note": "segment car ↔ box bus (IoU 1.00)"
+  },
+  {
+   "image": "img_0155",
+   "type": "bbox_drift",
+   "note": "sandwich: chỉ 67% pixel segment trong box (IoU 0.63)"
+  },
+  {
+   "image": "img_0155",
+   "type": "instance_merge",
+   "note": "segment sandwich trải trên 2 box sandwich, box lớn nhất giữ 67%"
+  },
+  {
+   "image": "img_0164",
+   "type": "class_or_category_swap",
+   "note": "segment cake ↔ box donut (IoU 0.99)"
+  },
+  {
+   "image": "img_0180",
+   "type": "class_or_category_swap",
+   "note": "segment car ↔ box bus (IoU 0.99)"
+  },
+  {
+   "image": "img_0192",
+   "type": "class_or_category_swap",
+   "note": "segment cell phone ↔ box remote (IoU 0.98)"
+  },
+  {
+   "image": "img_0230",
+   "type": "missing_box",
+   "note": "segment bench area 64149 không có box"
+  },
+  {
+   "image": "img_0235",
+   "type": "bbox_drift",
+   "note": "cat: chỉ 57% pixel segment trong box (IoU 0.51)"
+  }
+ ]
+}

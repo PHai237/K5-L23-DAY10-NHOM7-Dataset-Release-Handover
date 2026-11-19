@@ -1,0 +1,10 @@
+image;type;verdict;note
+img_0003;swap;confirmed;Ghế đơn thì class_swap, ghế băng dài thì category_swap
+img_0138;swap;confirmed;Ô tô con thì class_swap, xe buýt thì category_swap
+img_0155;bbox_drift;confirmed;Box sandwich chỉ chứa 67% pixel của segment
+img_0155;instance_merge;confirmed;2 miếng bánh riêng bị panoptic gộp làm một
+img_0164;swap;confirmed;Bánh kem thì class_swap, bánh donut thì category_swap
+img_0180;swap;confirmed;Ô tô con thì class_swap, xe buýt thì category_swap
+img_0192;swap;confirmed;Điện thoại thì class_swap, điều khiển TV thì category_swap
+img_0230;missing_box;confirmed;Có ghế băng rõ, chiếm nhiều chỗ trong ảnh không
+img_0235;bbox_drift;confirmed;Con mèo bị che
