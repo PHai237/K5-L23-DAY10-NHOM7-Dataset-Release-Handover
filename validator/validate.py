@@ -305,10 +305,10 @@ def pixels_in_box(pixels: bytes, width: int, height: int, box) -> Counter:
 
 # Ngưỡng ứng viên — chỉnh bằng lô sạch (runs/clean), ghi lý do vào REPORT.md.
 MATCH_IOU = 0.3           # box và segment coi là cùng một vật
-SWAP_IOU = 0.6            # trùng vị trí chặt hơn khi lớp khác nhau
-DRIFT_INSIDE_MAX = 0.80   # < 80% pixel segment nằm trong box cùng lớp gần nhất -> lệch
-DRIFT_IOU_MIN = 0.2       # nhưng box vẫn đang "nhắm" vào segment đó
-MISSING_MIN_FRAC = 0.01   # segment thing chiếm ≥1% ảnh mà không box nào phủ
+SWAP_IOU = 0.50           # trùng vị trí chặt khi lớp khác nhau (hạ từ 0.60 để bắt ca box hơi lệch)
+DRIFT_INSIDE_MAX = 0.82   # < 82% pixel segment nằm trong box cùng lớp gần nhất -> lệch
+DRIFT_IOU_MIN = 0.15      # nhưng box vẫn đang "nhắm" vào segment đó (bắt cả ca lệch mạnh)
+MISSING_MIN_FRAC = 0.008  # segment thing chiếm ≥0.8% ảnh mà không box nào phủ
 MERGE_SHARE_MIN = 0.25    # mỗi box cùng lớp chứa ≥25% pixel của segment -> có thể gộp
 MERGE_SINGLE_MAX = 0.80   # ...và không box nào một mình chứa ≥80% segment
 MERGE_PAIR_IOU_MAX = 0.3  # ...và có hai box giữ segment mà ít chồng nhau
@@ -333,7 +333,7 @@ def candidates(d: Delivery, skip: set[str]) -> list[dict]:
         seg_area = {s["id"]: max(1, s.get("area", 1)) for s in segs}
         inside = [pixels_in_box(pixels, width, height, b[1:]) for b in boxes]
 
-        reasons: list[tuple[str, str]] = []
+        reasons: dict[str, list[str]] = defaultdict(list)
         covered = set()
         for si, s in enumerate(segs):
             sid, sname = s["id"], name_of_seg[si]
@@ -353,31 +353,35 @@ def candidates(d: Delivery, skip: set[str]) -> list[dict]:
             # Lệch lớp: trùng vị trí chặt với box khác lớp, không có box cùng lớp nào khớp.
             if best_other and best_other[0] >= SWAP_IOU and (best_same is None or best_same[0] < MATCH_IOU):
                 bi = best_other[2]
-                reasons.append(("class_or_category_swap",
-                                f"segment {sname} ↔ box {name_of_box[bi]} (IoU {best_other[0]:.2f})"))
+                reasons["class_or_category_swap"].append(
+                    f"segment {sname} ↔ box {name_of_box[bi]} (IoU {best_other[0]:.2f})"
+                )
                 continue
 
-            # Lệch box: box cùng lớp nhắm vào segment nhưng để rơi nhiều pixel ra ngoài.
-            if best_same and best_same[0] >= DRIFT_IOU_MIN and best_same[1] < DRIFT_INSIDE_MAX:
-                reasons.append(("bbox_drift", f"{sname}: chỉ {best_same[1]:.0%} pixel segment trong box (IoU {best_same[0]:.2f})"))
-
-            # Gộp: không box cùng lớp nào ôm trọn segment, nhưng ≥2 box cùng lớp mỗi box giữ
-            # một phần đáng kể và các box này tách nhau (không lồng nhau như cặp tự nhiên).
+            # Gộp: kiểm trước bbox_drift để tránh báo đúp khi ≥2 box cùng lớp chia nhau 1 segment.
             share = {bi: inside[bi].get(sid, 0) / seg_area[sid] for bi in range(len(boxes)) if name_of_box[bi] == sname}
             holders = [bi for bi, f in share.items() if f >= MERGE_SHARE_MIN]
             if len(holders) >= 2 and max(share.values()) < MERGE_SINGLE_MAX:
                 separate = any(iou(boxes[a][1:], boxes[b][1:]) < MERGE_PAIR_IOU_MAX
                                for i, a in enumerate(holders) for b in holders[i + 1:])
                 if separate:
-                    reasons.append(("instance_merge",
-                                    f"segment {sname} trải trên {len(holders)} box {sname}, box lớn nhất giữ {max(share.values()):.0%}"))
+                    reasons["instance_merge"].append(
+                        f"segment {sname} trải trên {len(holders)} box {sname}, box lớn nhất giữ {max(share.values()):.0%}"
+                    )
+                    continue
+
+            # Lệch box: box cùng lớp nhắm vào segment nhưng để rơi nhiều pixel ra ngoài.
+            if best_same and best_same[0] >= DRIFT_IOU_MIN and best_same[1] < DRIFT_INSIDE_MAX:
+                reasons["bbox_drift"].append(
+                    f"{sname}: chỉ {best_same[1]:.0%} pixel segment trong box (IoU {best_same[0]:.2f})"
+                )
 
         for si, s in enumerate(segs):
             if si not in covered and s.get("area", 0) >= MISSING_MIN_FRAC * width * height:
-                reasons.append(("missing_box", f"segment {name_of_seg[si]} area {s.get('area')} không có box"))
+                reasons["missing_box"].append(f"segment {name_of_seg[si]} area {s.get('area')} không có box")
 
-        for kind, note in reasons:
-            out.append({"image": stem, "type": kind, "note": note})
+        for kind, notes in sorted(reasons.items()):
+            out.append({"image": stem, "type": kind, "note": "; ".join(notes)})
     return out
 
 
