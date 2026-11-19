@@ -4,6 +4,7 @@
 - Repo: https://github.com/PHai237/K5-L23-DAY10-OURS-Dataset-Release-Handover
 
 | Họ và tên | MSHV | Tài khoản GitHub | Phần chính |
+|---|---|---|---|
 | Vũ Duy Thế | 2A202604054 | ethan4496 | Validator luật |
 | Phạm Hải | 2A202604047 |  | Đối chiếu + Review |
 | Phạm Văn Dương | 2A202603332 |  | Đối chiếu + Review |
