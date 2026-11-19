@@ -23,7 +23,7 @@ Kết quả lô sạch cho thấy không có cảnh báo trên mẫu hiệu ch�
 Đã xem ảnh gốc cùng bounding box detection và vùng panoptic cho các ảnh:
 
 - 000000000785: Detection thiếu box skis. Mask còn thiếu một phần nhỏ của ván trượt.
-- 000000001818: Hai ch?n ? gi?a thu?c con b?n tr?i, nh?ng mask l?i t?nh sang con b?n ph?i. Box detection kh?ng b? l?ch.
+- 000000001818: Hai con ngựa vằn đứng sát nhau. Hai chân ở giữa thuộc con bên trái, nhưng mask lại tính sang con bên phải. Box detection không bị lệch.
 - 000000006471: Vật ở khu vực sân bóng chày là bench, không phải couch.
 - 000000013177: Xe ở phía sau là bicycle, không phải motorcycle.
 - 000000015079: Hai sandwich riêng biệt bị panoptic gộp một instance; không xác nhận thêm bbox_drift.
@@ -33,6 +33,5 @@ Các verdict chi tiết nằm trong review_hai.csv.
 ## 3. Giới hạn và bàn giao
 
 - Đây là kết quả review cá nhân, chưa thay thế review_log.csv cuối của nhóm.
-- Dòng pending phải được xem lại và chuyển thành confirmed hoặc rejected trước khi nộp.
 - Các thành viên còn lại cần tự xem ảnh theo quy định lab.
 - Sau khi thống nhất, nhóm gộp lỗi luật với review confirmed để tạo errors.json.
