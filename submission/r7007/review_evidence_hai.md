@@ -23,7 +23,7 @@ Kết quả lô sạch cho thấy không có cảnh báo trên mẫu hiệu ch�
 Đã xem ảnh gốc cùng bounding box detection và vùng panoptic cho các ảnh:
 
 - 000000000785: Detection thiếu box skis. Mask còn thiếu một phần nhỏ của ván trượt.
-- 000000001818: Hai ngựa vằn chồng lấn, có sự nhầm lẫn về hai chân thuộc con nào. Cần xác minh lại nghi vấn bbox_drift.
+- 000000001818: Hai ch?n ? gi?a thu?c con b?n tr?i, nh?ng mask l?i t?nh sang con b?n ph?i. Box detection kh?ng b? l?ch.
 - 000000006471: Vật ở khu vực sân bóng chày là bench, không phải couch.
 - 000000013177: Xe ở phía sau là bicycle, không phải motorcycle.
 - 000000015079: Hai sandwich riêng biệt bị panoptic gộp một instance; không xác nhận thêm bbox_drift.
